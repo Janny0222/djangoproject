@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+
+{% block title %}Register{% endblock %}
+
+{% block content %}
+  <div class="container">
+    <div class="row">
+      <div class="col-6 offset-3">
+        <h1 class="text-center my-3">REGISTER</h1>
+        {% if registration_success %}
+          <div class="modal fade" id="registrationSuccessModal" tabindex="-1" role="dialog" aria-labelledby="registrationSuccessModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="registrationSuccessModalLabel">Registration Successful</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  Your registration was successful. You can now log in.
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="redirectToLogin()">Close</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <script>
+            $(document).ready(function(){
+              $('#registrationSuccessModal').modal('show');
+            });
+            function redirectToLogin() {
+              window.location.href = "{% url 'todolist:login' %}";
+            }
+          </script>
+        {% endif %}
+        <form action="{% url 'todolist:register' %}" method="post">
+          {% csrf_token %}
+          {% if form.errors %}
+          <div class="alert alert-danger">
+            <ul>
+              {% for field, errors in form.errors.items %}
+                <li>{{ errors|join:", " }}</li>
+              {% endfor %}
+            </ul>
+          </div>
+          {% endif %}
+          <div class="mb-3">
+              <label for="username">Username: </label>
+              <input class="form-control" id="username" type="text" name="username" maxlength="50" required>
+          </div>
+
+          <div class="mb-3">
+              <label for="first_name">First Name: </label>
+              <input type="text" id="first_name" class="form-control" name="first_name" required>
+          </div>
+
+          <div class="mb-3">
+            <label for="last_name">Last Name: </label>
+            <input type="text" id="last_name" class="form-control" name="last_name"  required>
+          </div>
+
+          <div class="mb-3">
+            <label for="email">Email: </label>
+            <input type="text" id="email" class="form-control" name="email"  required>
+          </div>
+
+          <div class="mb-3">
+            <label for="password1">Password: </label>
+            <input type="password" id="password1" class="form-control" name="password1"  required>
+          </div>
+
+          <div class="mb-3">
+            <label for="password2">Confirm Password: </label>
+            <input type="password" id="password2" class="form-control" name="password2" required>
+          </div>
+            <div class="text-center">
+            <button type="submit" class="btn btn-success">Register</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+{% endblock %}
